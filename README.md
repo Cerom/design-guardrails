@@ -1,6 +1,6 @@
 # design-guardrails
 
-> [!TLDR]
+> TLDR
 > design-guardrails is an open-source CLI that enforces design system rules on AI coding agents via hooks, so the agent self-corrects without manual prompting.
 
 AI coding agents don't follow design systems reliably. Prompt instructions like CLAUDE.md and AGENTS.md are suggestions — agents drift from them mid-session.
