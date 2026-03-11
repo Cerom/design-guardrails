@@ -1,11 +1,9 @@
 # design-guardrails
 
-> TLDR
-> design-guardrails is an open-source CLI that enforces design system rules on AI coding agents via hooks, so the agent self-corrects without manual prompting.
+Your AI coding agents don't enforce your design system reliably. Prompt instructions like CLAUDE.md and AGENTS.md are only suggestions in the current context, and nothing prevents your agent to drift.
 
-AI coding agents don't follow design systems reliably. Prompt instructions like CLAUDE.md and AGENTS.md are suggestions — agents drift from them mid-session.
-
-design-guardrails installs hooks that give your agent deterministic feedback every time it writes code that violates your design system.
+`design-guardrails` relies on hooks that give your agent deterministic feedback every time it writes code that violates your design system.
+Your AI coding agent wrong implementation gets called out mid-session, without you having to babysit its output.
 
 `<button>` → "use `<Button>` from `@/components/ui/button`"
 `#63g5fh` → "use token `text-secondary`"
