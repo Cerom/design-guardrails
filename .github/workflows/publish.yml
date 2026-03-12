@@ -16,7 +16,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          registry-url: https://registry.npmjs.org
 
       - run: npm ci
       - run: npm run build
@@ -36,7 +35,7 @@ jobs:
 
       - name: Publish to npm
         if: steps.version.outputs.changed == 'true'
-        run: npm publish --provenance --access public
+        run: npm publish --provenance --access public --registry https://registry.npmjs.org
 
       - name: Create GitHub Release
         if: steps.version.outputs.changed == 'true'
