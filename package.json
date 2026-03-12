@@ -40,6 +40,10 @@
     "typescript",
     "react"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cerom/design-guardrails"
+  },
   "author": "",
   "license": "MIT"
 }
