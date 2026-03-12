@@ -1,8 +1,8 @@
 {
   "name": "design-guardrails",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Make your AI coding agent use your design system without human intervention.",
-  "main": "dist/cli.js",
+  "main": "dist/index.js",
   "bin": {
     "design-guardrails": "dist/cli.js"
   },
@@ -13,19 +13,21 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "typescript": "^5.0.0",
-    "commander": "^11.0.0",
     "chalk": "^4.1.2",
+    "cli-spinner": "^0.2.10",
+    "commander": "^11.0.0",
+    "glob": "^10.0.0",
     "inquirer": "^8.2.6",
-    "glob": "^10.0.0"
+    "typescript": "^5.0.0"
   },
   "devDependencies": {
-    "@types/node": "^20.0.0",
+    "@types/cli-spinner": "^0.2.3",
     "@types/inquirer": "^8.2.6",
-    "tsx": "^4.0.0",
-    "jest": "^29.0.0",
     "@types/jest": "^29.0.0",
-    "ts-jest": "^29.0.0"
+    "@types/node": "^20.0.0",
+    "jest": "^29.0.0",
+    "ts-jest": "^29.0.0",
+    "tsx": "^4.0.0"
   },
   "files": [
     "dist/**/*",

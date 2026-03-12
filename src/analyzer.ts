@@ -1,5 +1,6 @@
 import * as ts from 'typescript';
 import { readFileSync } from 'fs';
+import { basename, extname } from 'path';
 import { GuardrailsConfig, Violation, AnalysisResult } from './types/config.js';
 
 export class CodeAnalyzer {
@@ -23,7 +24,7 @@ export class CodeAnalyzer {
       );
 
       // Visit all nodes in the AST
-      this.visitNode(sourceFile, violations, sourceCode, filePath);
+      this.visitNode(sourceFile, violations, filePath);
 
     } catch (error) {
       console.error(`Error analyzing ${filePath}:`, error);
@@ -35,27 +36,26 @@ export class CodeAnalyzer {
     };
   }
 
-  private visitNode(node: ts.Node, violations: Violation[], sourceCode: string, filePath: string): void {
+  private visitNode(node: ts.Node, violations: Violation[], filePath: string): void {
     // Check for JSX elements (HTML tags)
     if (ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) {
-      this.checkElementViolation(node, violations, sourceCode, filePath);
+      this.checkElementViolation(node, violations, filePath);
     }
 
     // Check for string literals that might be colors/tokens
     if (ts.isStringLiteral(node)) {
-      this.checkTokenViolation(node, violations, sourceCode, filePath);
+      this.checkTokenViolation(node, violations, filePath);
     }
 
     // Recursively visit child nodes
     ts.forEachChild(node, (child) => {
-      this.visitNode(child, violations, sourceCode, filePath);
+      this.visitNode(child, violations, filePath);
     });
   }
 
   private checkElementViolation(
     node: ts.JsxOpeningElement | ts.JsxSelfClosingElement,
     violations: Violation[],
-    sourceCode: string,
     filePath: string
   ): void {
     const tagName = node.tagName;
@@ -65,6 +65,10 @@ export class CodeAnalyzer {
       const rule = this.config.rules.elements?.[elementName];
       
       if (rule) {
+        // Skip if this file IS the component wrapper (e.g. Btn.tsx using <button>)
+        const fileName = basename(filePath, extname(filePath));
+        if (fileName === rule.use) return;
+
         const position = ts.getLineAndCharacterOfPosition(
           node.getSourceFile(),
           node.getStart()
@@ -86,7 +90,6 @@ export class CodeAnalyzer {
   private checkTokenViolation(
     node: ts.StringLiteral,
     violations: Violation[],
-    sourceCode: string,
     filePath: string
   ): void {
     const value = node.text;

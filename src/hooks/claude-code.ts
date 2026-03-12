@@ -3,7 +3,7 @@
 import { CodeAnalyzer } from '../analyzer.js';
 import { ViolationFormatter } from '../formatter.js';
 import { GuardrailsConfig } from '../types/config.js';
-import { readFileSync } from 'fs';
+import { loadConfig } from '../config-loader.js';
 import { join } from 'path';
 
 interface ClaudeCodeHookInput {
@@ -49,8 +49,8 @@ async function main() {
       return allowAction();
     }
 
-    // Load guardrails config
-    const config = loadGuardrailsConfig(hookData.cwd);
+    // Load guardrails config (clearCache=true so edits to config are picked up)
+    const config = loadConfig(hookData.cwd, undefined, true);
     if (!config) {
       return allowAction(); // No config found, allow
     }
@@ -94,33 +94,6 @@ function readStdin(): Promise<string> {
       resolve(data);
     });
   });
-}
-
-function loadGuardrailsConfig(cwd: string): GuardrailsConfig | null {
-  const possiblePaths = [
-    join(cwd, 'guardrails.config.js'),
-    join(cwd, 'guardrails.config.ts'),
-    join(cwd, '.guardrails.js'),
-    join(cwd, '.guardrails.ts')
-  ];
-
-  for (const configPath of possiblePaths) {
-    try {
-      // Clear require cache
-      if (require.cache[configPath]) {
-        delete require.cache[configPath];
-      }
-      
-      const configModule = require(configPath);
-      return configModule.default || configModule;
-    } catch (error) {
-      // Try next path
-      continue;
-    }
-  }
-
-  // Config not found
-  return null;
 }
 
 function shouldAnalyzeFile(filePath: string, config: GuardrailsConfig): boolean {
