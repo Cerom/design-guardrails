@@ -115,7 +115,7 @@ export async function runWizard(): Promise<void> {
   console.log('');
 
   // Step 8: Write config
-  const configPath = writeConfig(cwd, {
+  writeConfig(cwd, {
     include: [includePattern],
     elementRules: selectedElements,
     tokenRules: selectedTokens,

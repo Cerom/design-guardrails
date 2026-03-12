@@ -15,7 +15,7 @@ program
   .description(
     'Make your AI coding agent use your design system without human intervention.',
   )
-  .version('0.1.0');
+  .version('0.1.1');
 
 program
   .command('check')
